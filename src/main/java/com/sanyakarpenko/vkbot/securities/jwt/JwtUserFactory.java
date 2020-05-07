@@ -2,7 +2,7 @@ package com.sanyakarpenko.vkbot.securities.jwt;
 
 import com.sanyakarpenko.vkbot.entities.Role;
 import com.sanyakarpenko.vkbot.entities.User;
-import com.sanyakarpenko.vkbot.types.Status;
+import com.sanyakarpenko.vkbot.types.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -21,7 +21,7 @@ public final class JwtUserFactory {
                 user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getStatus().equals(Status.ACTIVE),
+                user.getStatus().equals(UserStatus.ACTIVE),
                 user.getUpdated(),
                 mapToGrantedAuthority(new ArrayList<>(user.getRoles())));
     }

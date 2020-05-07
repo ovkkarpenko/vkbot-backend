@@ -1,6 +1,6 @@
 package com.sanyakarpenko.vkbot.entities;
 
-import com.sanyakarpenko.vkbot.types.Status;
+import com.sanyakarpenko.vkbot.types.UserStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -28,8 +28,4 @@ public class BaseEntity {
     @LastModifiedDate
     @Column(name = "updated")
     private Date updated;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private Status status;
 }
