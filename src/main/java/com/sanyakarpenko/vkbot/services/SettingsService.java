@@ -5,5 +5,5 @@ import com.sanyakarpenko.vkbot.entities.Task;
 import com.sanyakarpenko.vkbot.types.TaskStatus;
 
 public interface SettingsService {
-    Settings update(Settings settings);
+    Settings saveSettings(Settings settings);
 }

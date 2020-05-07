@@ -4,7 +4,7 @@ import com.sanyakarpenko.vkbot.entities.Program;
 import lombok.Data;
 
 @Data
-public class FindProgramRequestResource {
+public class FindProgramAccountsRequestResource {
     private String bindingKey;
 
     public Program toProgram() {

@@ -1,7 +1,7 @@
 package com.sanyakarpenko.vkbot.entities;
 
+import com.sanyakarpenko.vkbot.types.AccountStatus;
 import com.sanyakarpenko.vkbot.types.Gender;
-import com.sanyakarpenko.vkbot.types.VkcomAccountStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,11 +12,11 @@ import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "vkcom_accounts")
+@Table(name = "accounts")
 @Data
 @ToString(exclude = {"token", "program"})
 @NoArgsConstructor
-public class VkcomAccount extends BaseEntity {
+public class Account extends BaseEntity {
     @Column(name = "token", nullable = false)
     private String token;
 
@@ -35,7 +35,7 @@ public class VkcomAccount extends BaseEntity {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private VkcomAccountStatus status;
+    private AccountStatus status;
 
     @ManyToOne
     private Program program;

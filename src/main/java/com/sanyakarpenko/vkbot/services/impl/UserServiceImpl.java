@@ -32,52 +32,50 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(User user) {
-        Role roleUser = roleRepository.findByName("ROLE_USER");
-
+    public User addUser(User user) {
         List<Role> userRoles = new ArrayList<>();
-        userRoles.add(roleUser);
+        userRoles.add(roleRepository.findByName("ROLE_USER"));
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(userRoles);
         user.setStatus(UserStatus.ACTIVE);
 
         User registeredUser = userRepository.save(user);
-        log.info("IN register - user : {} successfully registered", registeredUser);
+        log.info("IN addUser - user : {} successfully added", registeredUser);
 
         return registeredUser;
     }
 
     @Override
-    public List<User> findAll() {
+    public List<User> findUsers() {
         List<User> result = userRepository.findAll();
-        log.info("IN getAll - {} users found", result.size());
+        log.info("IN findUsers - {} users found", result.size());
         return result;
     }
 
     @Override
-    public User findByUsername(String username) {
+    public User findUserByUsername(String username) {
         User result = userRepository.findByUsername(username);
-        log.info("IN findByUsername - {} found by username: {}", result, username);
+        log.info("IN findUserByUsername - {} found by username: {}", result, username);
         return result;
     }
 
     @Override
-    public User findById(Long id) {
+    public User findUserById(Long id) {
         Optional<User> result = userRepository.findById(id);
 
         if (result.isPresent()) {
-            log.info("IN findById - {} found by id: {}", result, id);
+            log.info("IN findUserById - {} found by id: {}", result, id);
             return result.get();
         }
 
-        log.warn("IN findById - no user found by id: {}", id);
+        log.warn("IN findUserById - no user found by id: {}", id);
         return null;
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
-        log.info("IN delete - user with id: {} successfully deleted", id);
+        log.info("IN deleteUser - user with id: {} successfully deleted", id);
     }
 }

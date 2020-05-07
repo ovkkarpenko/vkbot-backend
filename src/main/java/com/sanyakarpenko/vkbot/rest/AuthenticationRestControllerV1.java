@@ -41,7 +41,7 @@ public class AuthenticationRestControllerV1 {
             String username = requestResource.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestResource.getPassword()));
 
-            User user = userService.findByUsername(username);
+            User user = userService.findUserByUsername(username);
 
             if (user == null) {
                 throw new UsernameNotFoundException("User with username: " + username + " not found.");

@@ -1,5 +1,5 @@
 package com.sanyakarpenko.vkbot.types;
 
-public enum VkcomAccountStatus {
+public enum AccountStatus {
     VALID, INVALID, ERROR
 }

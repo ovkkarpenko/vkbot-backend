@@ -1,16 +1,11 @@
 package com.sanyakarpenko.vkbot.services.impl;
 
 import com.sanyakarpenko.vkbot.Utils.Helper;
-import com.sanyakarpenko.vkbot.entities.Program;
 import com.sanyakarpenko.vkbot.entities.Task;
 import com.sanyakarpenko.vkbot.entities.User;
-import com.sanyakarpenko.vkbot.entities.VkcomAccount;
 import com.sanyakarpenko.vkbot.repositories.TaskRepository;
 import com.sanyakarpenko.vkbot.repositories.UserRepository;
-import com.sanyakarpenko.vkbot.repositories.VkcomAccountRepository;
-import com.sanyakarpenko.vkbot.services.ProgramService;
 import com.sanyakarpenko.vkbot.services.TaskService;
-import com.sanyakarpenko.vkbot.types.TaskStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -28,27 +23,25 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findAll() {
+    public List<Task> findTasks() {
         List<Task> tasks = taskRepository.findAllByUserUsername(Helper.getUsername());
-        log.info("IN findAll - {} tasks found", tasks.size());
+        log.info("IN findTasks - {} tasks found", tasks.size());
         return tasks;
     }
 
     @Override
-    public Task add(Task task) {
-        User user = userRepository.findByUsername(Helper.getUsername());
-
-        task.setUser(user);
+    public Task addTask(Task task) {
+        task.setUser(userRepository.findByUsername(Helper.getUsername()));
 
         Task createdTask = taskRepository.save(task);
-        log.info("IN add - task : {} successfully added", createdTask);
+        log.info("IN addTask - task : {} successfully added", createdTask);
 
         return createdTask;
     }
 
     @Override
-    public void update(Task task) {
+    public void saveTask(Task task) {
         Task taskUpdated = taskRepository.save(task);
-        log.info("IN update - task : {} successfully updated", taskUpdated);
+        log.info("IN saveTask - task : {} successfully saved", taskUpdated);
     }
 }

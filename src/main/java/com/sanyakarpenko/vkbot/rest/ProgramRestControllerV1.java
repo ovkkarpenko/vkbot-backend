@@ -1,13 +1,14 @@
 package com.sanyakarpenko.vkbot.rest;
 
+import com.sanyakarpenko.vkbot.entities.Account;
 import com.sanyakarpenko.vkbot.entities.Program;
-import com.sanyakarpenko.vkbot.resources.AddProgramRequestResource;
-import com.sanyakarpenko.vkbot.resources.AddProgramResponseResource;
-import com.sanyakarpenko.vkbot.resources.FindProgramRequestResource;
+import com.sanyakarpenko.vkbot.resources.*;
 import com.sanyakarpenko.vkbot.services.ProgramService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/program",
@@ -23,18 +24,20 @@ public class ProgramRestControllerV1 {
     @PostMapping
     public ResponseEntity<?> addProgram(@RequestBody AddProgramRequestResource requestResource) {
         Program program = requestResource.toProgram();
-        Program createdProgram = programService.addProgram(program);
+        Program createdProgram = programService.saveProgram(program);
 
         return ResponseEntity.ok(AddProgramResponseResource.fromProgram(createdProgram));
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll() {
-
+    public ResponseEntity<?> findAllByUsername() {
+        List<Program> programs = programService.findProgramsByUsername();
+        return ResponseEntity.ok(programs.stream().map(ProgramResource::fromProgram));
     }
 
-    @GetMapping("/findByToken}")
-    public ResponseEntity<?> findByBindingKey(@RequestBody FindProgramRequestResource requestResource) {
-
+    @GetMapping("/accounts")
+    public ResponseEntity<?> findByBindingKey(@RequestBody FindProgramAccountsRequestResource requestResource) {
+        List<Account> accounts = programService.findProgramAccountsByBindingKey(requestResource.getBindingKey());
+        return ResponseEntity.ok(accounts.stream().map(AccountResource::fromAccount));
     }
 }

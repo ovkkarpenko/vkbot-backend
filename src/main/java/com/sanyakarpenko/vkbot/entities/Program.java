@@ -25,5 +25,5 @@ public class Program extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "program")
-    private List<VkcomAccount> accounts;
+    private List<Account> accounts;
 }

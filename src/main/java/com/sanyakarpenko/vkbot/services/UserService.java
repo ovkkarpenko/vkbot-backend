@@ -5,13 +5,13 @@ import com.sanyakarpenko.vkbot.entities.User;
 import java.util.List;
 
 public interface UserService {
-    User register(User user);
+    User addUser(User user);
 
-    List<User> findAll();
+    List<User> findUsers();
 
-    User findByUsername(String username);
+    User findUserByUsername(String username);
 
-    User findById(Long id);
+    User findUserById(Long id);
 
-    void delete(Long id);
+    void deleteUser(Long id);
 }

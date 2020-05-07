@@ -2,16 +2,16 @@ package com.sanyakarpenko.vkbot.services;
 
 
 import com.sanyakarpenko.vkbot.entities.Program;
-import com.sanyakarpenko.vkbot.entities.VkcomAccount;
+import com.sanyakarpenko.vkbot.entities.Account;
 
 import java.util.List;
 
 public interface ProgramService {
-    Program addProgram(Program program);
+    Program saveProgram(Program program);
 
-    List<Program> findAll();
+    List<Program> findProgramsByUsername();
 
-    Program findByBindingKey(String bindingKey);
+    Program findProgramByBindingKey(String bindingKey);
 
-    List<VkcomAccount> findAllAccountsByBindingKey(String bindingKey);
+    List<Account> findProgramAccountsByBindingKey(String bindingKey);
 }
