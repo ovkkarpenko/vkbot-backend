@@ -30,13 +30,13 @@ public class ProgramRestControllerV1 {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAllByUsername() {
+    public ResponseEntity<?> findProgramsByUsername() {
         List<Program> programs = programService.findProgramsByUsername();
         return ResponseEntity.ok(programs.stream().map(ProgramResource::fromProgram));
     }
 
     @GetMapping("/accounts")
-    public ResponseEntity<?> findByBindingKey(@RequestBody FindProgramAccountsRequestResource requestResource) {
+    public ResponseEntity<?> findProgramAccountsByBindingKey(@RequestBody FindProgramAccountsRequestResource requestResource) {
         List<Account> accounts = programService.findProgramAccountsByBindingKey(requestResource.getBindingKey());
         return ResponseEntity.ok(accounts.stream().map(AccountResource::fromAccount));
     }
