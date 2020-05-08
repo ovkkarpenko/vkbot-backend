@@ -1,14 +1,13 @@
 package com.sanyakarpenko.vkbot.services.impl;
 
 import com.sanyakarpenko.vkbot.entities.Account;
-import com.sanyakarpenko.vkbot.entities.Program;
 import com.sanyakarpenko.vkbot.repositories.AccountRepository;
-import com.sanyakarpenko.vkbot.repositories.ProgramRepository;
 import com.sanyakarpenko.vkbot.services.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -34,5 +33,19 @@ public class AccountServiceImpl implements AccountService {
         log.info("IN saveAccount - account : {} successfully saved", accountUpdated);
 
         return accountUpdated;
+    }
+
+    @Override
+    public Account findAccount(Long id) {
+        Optional<Account> accountOptional = accountRepository.findById(id);
+
+        if(accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+            log.info("IN findAccount - {} account found by id: {}", account, id);
+            return account;
+        }
+
+        log.info("IN findAccount - no account found by id: {}", id);
+        return null;
     }
 }

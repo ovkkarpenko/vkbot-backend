@@ -11,18 +11,17 @@ import java.util.Date;
 
 @Data
 public class AccountResource {
+    private Long id;
     private String token;
     private String fullName;
     private String country;
     private Date birthday;
-
-    @Enumerated(EnumType.STRING)
     private Gender gender;
-    @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
     public Account toAccount() {
         Account account = new Account();
+        account.setId(id);
         account.setToken(token);
         account.setFullName(fullName);
         account.setCountry(country);
@@ -35,6 +34,7 @@ public class AccountResource {
 
     public static AccountResource fromAccount(Account account) {
         AccountResource resource = new AccountResource();
+        resource.setId(account.getId());
         resource.setToken(account.getToken());
         resource.setFullName(account.getFullName());
         resource.setCountry(account.getCountry());

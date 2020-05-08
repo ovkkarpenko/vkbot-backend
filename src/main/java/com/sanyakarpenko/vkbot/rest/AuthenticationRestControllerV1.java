@@ -55,11 +55,9 @@ public class AuthenticationRestControllerV1 {
 
             return ResponseEntity.ok(responseResource);
         } catch (AuthenticationException e) {
-            ErrorResponseResource error = new ErrorResponseResource();
-            error.setErrorCode(1L);
-            error.setErrorMessage("Invalid username or password");
-
-            return ResponseEntity.badRequest().body(error);
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(1L, "Invalid username or password"));
         }
     }
 }

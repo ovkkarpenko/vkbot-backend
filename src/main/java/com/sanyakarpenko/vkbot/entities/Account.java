@@ -9,12 +9,13 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "accounts")
 @Data
-@ToString(exclude = {"token", "program"})
+@ToString(exclude = {"token", "program", "tasks"})
 @NoArgsConstructor
 public class Account extends BaseEntity {
     @Column(name = "token", nullable = false)
@@ -39,4 +40,7 @@ public class Account extends BaseEntity {
 
     @ManyToOne
     private Program program;
+
+    @ManyToMany(mappedBy = "accountsHistory", fetch = FetchType.LAZY)
+    private List<Task> tasks;
 }

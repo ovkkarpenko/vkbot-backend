@@ -1,6 +1,6 @@
 package com.sanyakarpenko.vkbot.services.impl;
 
-import com.sanyakarpenko.vkbot.Utils.Helper;
+import com.sanyakarpenko.vkbot.utils.Helper;
 import com.sanyakarpenko.vkbot.entities.Program;
 import com.sanyakarpenko.vkbot.entities.User;
 import com.sanyakarpenko.vkbot.entities.Account;

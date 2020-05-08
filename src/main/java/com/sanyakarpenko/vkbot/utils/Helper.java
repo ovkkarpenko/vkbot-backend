@@ -1,4 +1,4 @@
-package com.sanyakarpenko.vkbot.Utils;
+package com.sanyakarpenko.vkbot.utils;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.context.SecurityContextHolder;

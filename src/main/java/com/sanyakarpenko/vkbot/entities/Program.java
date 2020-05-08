@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "programs")
 @Data
-@ToString(exclude = {"accounts"})
+@ToString(exclude = {"accounts", "user"})
 @NoArgsConstructor
 public class Program extends BaseEntity {
     @Column(name = "name", nullable = false)

@@ -5,7 +5,11 @@ import com.sanyakarpenko.vkbot.entities.Task;
 import java.util.List;
 
 public interface TaskService {
-    List<Task> findTasks();
+    Task findTask(Long id);
+
+    List<Task> findTasksByUsername(String username);
+
+    List<Task> findCurrentUserTasks();
 
     Task addTask(Task task);
 
