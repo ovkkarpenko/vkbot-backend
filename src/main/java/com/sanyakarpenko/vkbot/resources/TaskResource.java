@@ -1,7 +1,8 @@
 package com.sanyakarpenko.vkbot.resources;
 
 import com.sanyakarpenko.vkbot.entities.Task;
-import com.sanyakarpenko.vkbot.types.TaskType;
+import com.sanyakarpenko.vkbot.types.ObjectType;
+import com.sanyakarpenko.vkbot.types.TaskStatus;
 import lombok.Data;
 
 @Data
@@ -9,14 +10,16 @@ public class TaskResource {
     private Long id;
     private String url;
     private Integer count;
-    private TaskType taskType;
+    private TaskStatus status;
+    private ObjectType objectType;
 
     public Task toTask() {
         Task task = new Task();
         task.setId(id);
         task.setUrl(url);
         task.setCount(count);
-        task.setTaskType(taskType);
+        task.setStatus(status);
+        task.setObjectType(objectType);
 
         return task;
     }
@@ -26,7 +29,8 @@ public class TaskResource {
         resource.setId(task.getId());
         resource.setUrl(task.getUrl());
         resource.setCount(task.getCount());
-        resource.setTaskType(task.getTaskType());
+        resource.setStatus(task.getStatus());
+        resource.setObjectType(task.getObjectType());
 
         return resource;
     }

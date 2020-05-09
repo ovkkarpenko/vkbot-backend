@@ -29,10 +29,22 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account saveAccount(Account account) {
-        Account accountUpdated = accountRepository.save(account);
-        log.info("IN saveAccount - account : {} successfully saved", accountUpdated);
+        Optional<Account> accountOptional = accountRepository.findById(account.getId());
 
-        return accountUpdated;
+        if (accountOptional.isPresent()) {
+            Account accountLoaded = accountOptional.get();
+
+            account.setCreated(accountLoaded.getCreated());
+            account.setUpdated(accountLoaded.getUpdated());
+            account.setProgram(accountLoaded.getProgram());
+
+            Account accountSaved = accountRepository.save(account);
+            log.info("IN saveAccount - account : {} successfully saved", accountSaved);
+
+            return accountSaved;
+        }
+
+        return null;
     }
 
     @Override

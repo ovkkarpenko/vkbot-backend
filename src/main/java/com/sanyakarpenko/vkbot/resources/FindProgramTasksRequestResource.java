@@ -1,5 +1,6 @@
 package com.sanyakarpenko.vkbot.resources;
 
+import com.sanyakarpenko.vkbot.types.ObjectType;
 import com.sanyakarpenko.vkbot.types.TaskType;
 import lombok.Data;
 

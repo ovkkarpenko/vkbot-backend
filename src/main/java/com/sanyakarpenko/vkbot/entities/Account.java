@@ -18,7 +18,10 @@ import java.util.List;
 @ToString(exclude = {"token", "program", "tasks"})
 @NoArgsConstructor
 public class Account extends BaseEntity {
-    @Column(name = "token", nullable = false)
+    @Column(name = "user_id")
+    private String userId;
+
+    @Column(name = "token")
     private String token;
 
     @Column(name = "full_name")
@@ -27,6 +30,12 @@ public class Account extends BaseEntity {
     @Column(name = "country")
     private String country;
 
+    @Column(name = "proxy")
+    private String proxy;
+
+    @Column(name = "user_agent")
+    private String userAgent;
+
     @Column(name = "birthday")
     private Date birthday;
 
@@ -34,7 +43,7 @@ public class Account extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 

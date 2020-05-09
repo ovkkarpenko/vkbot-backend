@@ -1,6 +1,7 @@
 package com.sanyakarpenko.vkbot.entities;
 
 import com.sanyakarpenko.vkbot.types.TaskStatus;
+import com.sanyakarpenko.vkbot.types.ObjectType;
 import com.sanyakarpenko.vkbot.types.TaskType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,6 +36,10 @@ public class Task extends BaseEntity {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
+
+    @Column(name = "object_type")
+    @Enumerated(EnumType.STRING)
+    private ObjectType objectType;
 
     @Column(name = "task_type")
     @Enumerated(EnumType.STRING)

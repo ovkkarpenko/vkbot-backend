@@ -6,6 +6,7 @@ import com.sanyakarpenko.vkbot.services.AccountService;
 import com.sanyakarpenko.vkbot.services.ProgramService;
 import com.sanyakarpenko.vkbot.services.SettingsService;
 import com.sanyakarpenko.vkbot.services.TaskService;
+import com.sanyakarpenko.vkbot.types.TaskType;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,22 @@ public class ProgramRestControllerV1 {
         this.settingsService = settingsService;
     }
 
-    @GetMapping("/account/{bindingKey}")
+    @GetMapping(value = "/{bindingKey}",
+            consumes = MediaType.ALL_VALUE)
+    public ResponseEntity<?> getProgram(@PathVariable String bindingKey) {
+        Program program = programService.findProgramByBindingKey(bindingKey);
+
+        if (program == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(3L, "No program by bindingKey: " + bindingKey));
+        }
+
+        return ResponseEntity.ok(ProgramResource.fromProgram(program));
+    }
+
+    @GetMapping(value = "/account/{bindingKey}",
+            consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> findProgramAccounts(@PathVariable String bindingKey) {
         List<Account> accounts = programService.findProgramAccountsByBindingKey(bindingKey);
         return ResponseEntity.ok(accounts.stream().map(AccountResource::fromAccount));
@@ -41,9 +57,17 @@ public class ProgramRestControllerV1 {
 
     /**
      * Save account information after authorisation via client program
+     *
+     * @param requestResource
      */
     @PutMapping("/account")
     public ResponseEntity<?> saveAccount(@RequestBody AccountResource requestResource) {
+        if (requestResource.getId() <= 0) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(4L, "AccountId invalid"));
+        }
+
         accountService.saveAccount(requestResource.toAccount());
         return ResponseEntity.ok().build();
     }
@@ -81,6 +105,8 @@ public class ProgramRestControllerV1 {
 
     /**
      * After completing a task mark the task as completed for the account
+     *
+     * @param requestResource
      */
     @PutMapping("/task/completed")
     public ResponseEntity<?> markTaskCompleted(@RequestBody MarkTaskCompletedRequestResource requestResource) {
@@ -95,8 +121,9 @@ public class ProgramRestControllerV1 {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/settings/{bindingKey}")
-    public ResponseEntity<?> getProgramSettings(@PathVariable String bindingKey) {
+    @GetMapping(value = "/settings/{bindingKey}",
+            consumes = MediaType.ALL_VALUE)
+    public ResponseEntity<?> getSettings(@PathVariable String bindingKey) {
         Program program = programService.findProgramByBindingKey(bindingKey);
         Settings settings = settingsService.findSettingsByUsername(program.getUser().getUsername());
         return ResponseEntity.ok(SettingsResource.fromSettings(settings));
