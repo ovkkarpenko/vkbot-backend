@@ -42,7 +42,7 @@ public class ProgramRestControllerV1 {
         if (program == null) {
             return ResponseEntity
                     .badRequest()
-                    .body(new ErrorResponseResource(3L, "No program by bindingKey: " + bindingKey));
+                    .body(new ErrorResponseResource(3L, "No program found by bindingKey: " + bindingKey));
         }
 
         return ResponseEntity.ok(ProgramResource.fromProgram(program));
@@ -51,6 +51,13 @@ public class ProgramRestControllerV1 {
     @GetMapping(value = "/account/{bindingKey}",
             consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> findProgramAccounts(@PathVariable String bindingKey) {
+        Program program = programService.findProgramByBindingKey(bindingKey);
+        if (program == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(3L, "No program found by bindingKey: " + bindingKey));
+        }
+
         List<Account> accounts = programService.findProgramAccountsByBindingKey(bindingKey);
         return ResponseEntity.ok(accounts.stream().map(AccountResource::fromAccount));
     }
@@ -60,12 +67,20 @@ public class ProgramRestControllerV1 {
      *
      * @param requestResource
      */
-    @PutMapping("/account")
-    public ResponseEntity<?> saveAccount(@RequestBody AccountResource requestResource) {
-        if (requestResource.getId() <= 0) {
+    @PutMapping("/account/{bindingKey}")
+    public ResponseEntity<?> saveAccount(@PathVariable String bindingKey, @RequestBody AccountResource requestResource) {
+        Program program = programService.findProgramByBindingKey(bindingKey);
+        if (program == null) {
             return ResponseEntity
                     .badRequest()
-                    .body(new ErrorResponseResource(4L, "AccountId invalid"));
+                    .body(new ErrorResponseResource(3L, "No program found by bindingKey: " + bindingKey));
+        }
+
+        Account account = accountService.findAccount(requestResource.getId());
+        if (account == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(4L, "No account found by accountId: " + requestResource.getId()));
         }
 
         accountService.saveAccount(requestResource.toAccount());
@@ -77,9 +92,9 @@ public class ProgramRestControllerV1 {
      *
      * @param requestResource
      */
-    @PostMapping("/task")
-    public ResponseEntity<?> findTasks(@RequestBody FindProgramTasksRequestResource requestResource) {
-        Program program = programService.findProgramByBindingKey(requestResource.getBindingKey());
+    @PostMapping("/task/{bindingKey}")
+    public ResponseEntity<?> findTasks(@PathVariable String bindingKey, @RequestBody FindProgramTasksRequestResource requestResource) {
+        Program program = programService.findProgramByBindingKey(bindingKey);
         if (program == null) {
             return ResponseEntity
                     .badRequest()
@@ -108,10 +123,28 @@ public class ProgramRestControllerV1 {
      *
      * @param requestResource
      */
-    @PutMapping("/task/completed")
-    public ResponseEntity<?> markTaskCompleted(@RequestBody MarkTaskCompletedRequestResource requestResource) {
+    @PutMapping("/task/completed/{bindingKey}")
+    public ResponseEntity<?> markTaskCompleted(@PathVariable String bindingKey, @RequestBody MarkTaskCompletedRequestResource requestResource) {
+        Program program = programService.findProgramByBindingKey(bindingKey);
+        if (program == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(2L, "Invalid bindingKey"));
+        }
+
         Task task = taskService.findTask(requestResource.getTaskId());
+        if (task == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(7L, "No task found by taskId: +" + requestResource.getTaskId()));
+        }
+
         Account account = accountService.findAccount(requestResource.getAccountId());
+        if (account == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(4L, "No account found by accountId: +" + requestResource.getAccountId()));
+        }
 
         task.increaseStatsCompleted();
         task.getAccountsHistory().add(account);
@@ -125,6 +158,12 @@ public class ProgramRestControllerV1 {
             consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> getSettings(@PathVariable String bindingKey) {
         Program program = programService.findProgramByBindingKey(bindingKey);
+        if (program == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(3L, "No program found by bindingKey: " + bindingKey));
+        }
+
         Settings settings = settingsService.findSettingsByUsername(program.getUser().getUsername());
         return ResponseEntity.ok(SettingsResource.fromSettings(settings));
     }

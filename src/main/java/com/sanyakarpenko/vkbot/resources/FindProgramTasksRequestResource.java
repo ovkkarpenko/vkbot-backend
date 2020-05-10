@@ -7,6 +7,5 @@ import lombok.Data;
 @Data
 public class FindProgramTasksRequestResource {
     private Long accountId;
-    private String bindingKey;
     private TaskType taskType;
 }

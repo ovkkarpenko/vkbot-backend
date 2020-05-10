@@ -39,13 +39,15 @@ public class TaskServiceImpl implements TaskService {
             return task;
         }
 
-        log.info("IN findTaskById - no task found by id: {}", id);
+        log.warn("IN findTaskById - no task found by id: {}", id);
         return null;
     }
 
     @Override
     public List<Task> findCurrentUserTasks() {
-        return findTasksByUsername(Helper.getUsername());
+        List<Task> tasks = findTasksByUsername(Helper.getUsername());
+        log.info("IN findCurrentUserTasks - {} tasks found", tasks.size());
+        return tasks;
     }
 
     @Override

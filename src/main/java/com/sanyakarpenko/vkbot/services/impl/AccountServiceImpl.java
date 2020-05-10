@@ -44,6 +44,7 @@ public class AccountServiceImpl implements AccountService {
             return accountSaved;
         }
 
+        log.warn("IN saveAccount - no account found by id: {}", account.getId());
         return null;
     }
 
@@ -57,7 +58,7 @@ public class AccountServiceImpl implements AccountService {
             return account;
         }
 
-        log.info("IN findAccount - no account found by id: {}", id);
+        log.warn("IN findAccount - no account found by id: {}", id);
         return null;
     }
 }
