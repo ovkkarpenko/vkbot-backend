@@ -1,5 +1,6 @@
 package com.sanyakarpenko.vkbot.services.impl;
 
+import com.sanyakarpenko.vkbot.types.ProgramStatus;
 import com.sanyakarpenko.vkbot.utils.Helper;
 import com.sanyakarpenko.vkbot.entities.Program;
 import com.sanyakarpenko.vkbot.entities.User;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -40,9 +42,15 @@ public class ProgramServiceImpl implements ProgramService {
     }
 
     @Override
-    public List<Program> findProgramsByUsername() {
-        List<Program> programs = programRepository.findAllByUserUsername(Helper.getUsername());
+    public List<Program> findProgramsByUsername(String username) {
+        List<Program> programs = programRepository.findAllByUserUsername(username);
         log.info("IN findProgramsByUsername - {} programs found", programs.size());
+        return programs;
+    }
+
+    @Override
+    public List<Program> findProgramsByCurrentUser() {
+        List<Program> programs = findProgramsByUsername(Helper.getUsername());
         return programs;
     }
 
@@ -51,6 +59,20 @@ public class ProgramServiceImpl implements ProgramService {
         Program program = programRepository.findByBindingKey(bindingKey);
         log.info("IN findProgramByBindingKey - {} found by bindingKey: {}", program, bindingKey);
         return program;
+    }
+
+    @Override
+    public Program findProgramById(Long id) {
+        Optional<Program> programOptional = programRepository.findById(id);
+
+        if (programOptional.isPresent()) {
+            Program program = programOptional.get();
+            log.info("IN findProgramById - {} program found by id: {}", program, id);
+            return program;
+        }
+
+        log.info("IN findProgramById - no program found by id: {}", id);
+        return null;
     }
 
     @Override

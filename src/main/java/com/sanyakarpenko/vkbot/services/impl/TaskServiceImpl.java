@@ -1,5 +1,6 @@
 package com.sanyakarpenko.vkbot.services.impl;
 
+import com.sanyakarpenko.vkbot.entities.User;
 import com.sanyakarpenko.vkbot.utils.Helper;
 import com.sanyakarpenko.vkbot.entities.Task;
 import com.sanyakarpenko.vkbot.repositories.TaskRepository;
@@ -23,14 +24,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findTasksByUsername(String username) {
-        List<Task> tasks = taskRepository.findAllByUserUsername(username);
-        log.info("IN findTasksByUsername - {} tasks found", tasks.size());
-        return tasks;
-    }
-
-    @Override
-    public Task findTask(Long id) {
+    public Task findTaskById(Long id) {
         Optional<Task> taskOptional = taskRepository.findById(id);
 
         if(taskOptional.isPresent()) {
@@ -44,25 +38,27 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findCurrentUserTasks() {
-        List<Task> tasks = findTasksByUsername(Helper.getUsername());
-        log.info("IN findCurrentUserTasks - {} tasks found", tasks.size());
+    public List<Task> findTasksByUsername(String username) {
+        List<Task> tasks = taskRepository.findAllByUserUsername(username);
+        log.info("IN findTasksByUsername - {} tasks found", tasks.size());
         return tasks;
     }
 
     @Override
-    public Task addTask(Task task) {
-        task.setUser(userRepository.findByUsername(Helper.getUsername()));
-
-        Task createdTask = taskRepository.save(task);
-        log.info("IN addTask - task : {} successfully added", createdTask);
-
-        return createdTask;
+    public List<Task> findTasksByCurrentUser() {
+        List<Task> tasks = findTasksByUsername(Helper.getUsername());
+        return tasks;
     }
 
     @Override
-    public void saveTask(Task task) {
-        Task taskUpdated = taskRepository.save(task);
-        log.info("IN saveTask - task : {} successfully saved", taskUpdated);
+    public Task saveTask(Task task) {
+        User user = userRepository.findByUsername(Helper.getUsername());
+
+        task.setUser(user);
+
+        Task savedTask = taskRepository.save(task);
+        log.info("IN saveTask - task : {} successfully saved", savedTask);
+
+        return savedTask;
     }
 }
