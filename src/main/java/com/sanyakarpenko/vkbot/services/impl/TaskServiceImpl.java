@@ -1,6 +1,7 @@
 package com.sanyakarpenko.vkbot.services.impl;
 
 import com.sanyakarpenko.vkbot.entities.User;
+import com.sanyakarpenko.vkbot.types.TaskStatus;
 import com.sanyakarpenko.vkbot.utils.Helper;
 import com.sanyakarpenko.vkbot.entities.Task;
 import com.sanyakarpenko.vkbot.repositories.TaskRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -29,6 +31,11 @@ public class TaskServiceImpl implements TaskService {
 
         if(taskOptional.isPresent()) {
             Task task = taskOptional.get();
+
+            if(task.getStatus() == TaskStatus.DELETED) {
+                return null;
+            }
+
             log.info("IN findTaskById - {} task found by id: {}", task, id);
             return task;
         }
@@ -39,14 +46,23 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> findTasksByUsername(String username) {
-        List<Task> tasks = taskRepository.findAllByUserUsername(username);
+        List<Task> tasks = taskRepository.findAllByUserUsername(username)
+                .stream()
+                .filter(task -> task.getStatus() != TaskStatus.DELETED)
+                .collect(Collectors.toList());
+
         log.info("IN findTasksByUsername - {} tasks found", tasks.size());
         return tasks;
     }
 
     @Override
     public List<Task> findTasksByCurrentUser() {
-        List<Task> tasks = findTasksByUsername(Helper.getUsername());
+        List<Task> tasks = findTasksByUsername(Helper.getUsername())
+                .stream()
+                .filter(task -> task.getStatus() != TaskStatus.DELETED)
+                .collect(Collectors.toList());
+
+        log.info("IN findTasksByCurrentUser - {} tasks found", tasks.size());
         return tasks;
     }
 

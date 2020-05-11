@@ -1,6 +1,8 @@
 package com.sanyakarpenko.vkbot.rest;
 
+import com.sanyakarpenko.vkbot.entities.Account;
 import com.sanyakarpenko.vkbot.entities.Program;
+import com.sanyakarpenko.vkbot.resources.AccountResource;
 import com.sanyakarpenko.vkbot.resources.ProgramRequestResource;
 import com.sanyakarpenko.vkbot.resources.ProgramResource;
 import com.sanyakarpenko.vkbot.services.ProgramService;
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.EntityResponse;
 
 import java.util.List;
 
@@ -28,6 +31,12 @@ public class ProgramRestControllerV1 {
     public ResponseEntity<?> getPrograms() {
         List<Program> programs = programService.findProgramsByCurrentUser();
         return ResponseEntity.ok(programs.stream().map(ProgramResource::fromProgram));
+    }
+
+    @GetMapping("/account/{bindingKey}")
+    public ResponseEntity<?> getAccounts(@PathVariable String bindingKey) {
+        List<Account> accounts = programService.findProgramAccountsByBindingKey(bindingKey);
+        return ResponseEntity.ok(accounts.stream().map(AccountResource::fromAccount));
     }
 
     @PostMapping

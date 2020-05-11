@@ -76,7 +76,7 @@ public class ClientProgramRestControllerV1 {
                     .body(new ErrorResponseResource(3L, "No program found by bindingKey: " + bindingKey));
         }
 
-        Account account = accountService.findAccount(requestResource.getId());
+        Account account = accountService.findAccountById(requestResource.getId());
         if (account == null) {
             return ResponseEntity
                     .badRequest()
@@ -101,7 +101,7 @@ public class ClientProgramRestControllerV1 {
                     .body(new ErrorResponseResource(2L, "Invalid bindingKey"));
         }
 
-        Account account = accountService.findAccount(requestResource.getAccountId());
+        Account account = accountService.findAccountById(requestResource.getAccountId());
         if (account == null) {
             return ResponseEntity
                     .badRequest()
@@ -139,7 +139,7 @@ public class ClientProgramRestControllerV1 {
                     .body(new ErrorResponseResource(7L, "No task found by taskId: +" + requestResource.getTaskId()));
         }
 
-        Account account = accountService.findAccount(requestResource.getAccountId());
+        Account account = accountService.findAccountById(requestResource.getAccountId());
         if (account == null) {
             return ResponseEntity
                     .badRequest()
@@ -164,7 +164,7 @@ public class ClientProgramRestControllerV1 {
                     .body(new ErrorResponseResource(3L, "No program found by bindingKey: " + bindingKey));
         }
 
-        Settings settings = settingsService.findSettingsByUsername(program.getUser().getUsername());
+        Settings settings = settingsService.findSettingsByCurrentUser();
         return ResponseEntity.ok(SettingsResource.fromSettings(settings));
     }
 }

@@ -24,13 +24,13 @@ public class UserResource {
     }
 
     public static UserResource fromUser(User user) {
-        UserResource userResource = new UserResource();
-        userResource.setId(user.getId());
-        userResource.setUsername(user.getUsername());
-        userResource.setFirstName(user.getFirstName());
-        userResource.setLastName(user.getLastName());
-        userResource.setEmail(user.getEmail());
+        UserResource resource = new UserResource();
+        resource.setId(user.getId());
+        resource.setUsername(user.getUsername());
+        resource.setFirstName(user.getFirstName());
+        resource.setLastName(user.getLastName());
+        resource.setEmail(user.getEmail());
 
-        return userResource;
+        return resource;
     }
 }

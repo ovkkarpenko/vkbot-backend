@@ -1,11 +1,13 @@
 package com.sanyakarpenko.vkbot.services.impl;
 
 import com.sanyakarpenko.vkbot.entities.Role;
+import com.sanyakarpenko.vkbot.entities.Task;
 import com.sanyakarpenko.vkbot.entities.User;
 import com.sanyakarpenko.vkbot.repositories.RoleRepository;
 import com.sanyakarpenko.vkbot.repositories.UserRepository;
 import com.sanyakarpenko.vkbot.services.UserService;
 import com.sanyakarpenko.vkbot.types.UserStatus;
+import com.sanyakarpenko.vkbot.utils.Helper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -55,18 +57,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByUsername(String username) {
-        User result = userRepository.findByUsername(username);
-        log.info("IN findUserByUsername - {} found by username: {}", result, username);
-        return result;
+        User user = userRepository.findByUsername(username);
+
+        if(user.getStatus() == UserStatus.DELETED) {
+            return null;
+        }
+
+        log.info("IN findUserByUsername - {} found by username: {}", user, username);
+        return user;
     }
 
     @Override
     public User findUserById(Long id) {
-        Optional<User> result = userRepository.findById(id);
+        Optional<User> userOptional = userRepository.findById(id);
 
-        if (result.isPresent()) {
-            log.info("IN findUserById - {} found by id: {}", result, id);
-            return result.get();
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            if(user.getStatus() == UserStatus.DELETED) {
+                return null;
+            }
+
+            log.info("IN findUserById - {} found by id: {}", user, id);
+            return user;
         }
 
         log.warn("IN findUserById - no user found by id: {}", id);
@@ -74,8 +87,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-        log.info("IN deleteUser - user with id: {} successfully deleted", id);
+    public User setStatus(UserStatus userStatus) {
+        User user = userRepository.findByUsername(Helper.getUsername());
+
+        user.setStatus(userStatus);
+
+        User savedUser = userRepository.save(user);
+        log.info("IN setStatus - user : {} successfully updated", savedUser);
+
+        return savedUser;
     }
 }

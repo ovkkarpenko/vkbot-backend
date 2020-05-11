@@ -19,15 +19,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void addAccounts(List<Account> accounts) {
-        for (Account account : accounts) {
-            accountRepository.save(account);
-        }
-
-        log.info("IN addAccounts - accounts : {} successfully added", accounts.size());
-    }
-
-    @Override
     public Account saveAccount(Account account) {
         Optional<Account> accountOptional = accountRepository.findById(account.getId());
 
@@ -39,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
             account.setProgram(accountLoaded.getProgram());
 
             Account accountSaved = accountRepository.save(account);
-            log.info("IN saveAccount - account : {} successfully saved", accountSaved);
+            log.info("IN saveAccount - account: {} successfully saved", accountSaved);
 
             return accountSaved;
         }
@@ -49,7 +40,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account findAccount(Long id) {
+    public Account addAccount(Account account) {
+        Account addedAccount = accountRepository.save(account);
+        log.warn("IN addAccount - account: {} successfully added", addedAccount);
+        return null;
+    }
+
+    @Override
+    public Account findAccountById(Long id) {
         Optional<Account> accountOptional = accountRepository.findById(id);
 
         if(accountOptional.isPresent()) {

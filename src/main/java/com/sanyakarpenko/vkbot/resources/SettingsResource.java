@@ -16,6 +16,21 @@ public class SettingsResource {
     private Integer timeoutAfterTask;
     private ProxyType proxyType;
 
+    public Settings toSettings() {
+        Settings settings = new Settings();
+        settings.setProxies(proxies);
+        settings.setUserAgents(userAgents);
+        settings.setRucaptchaKey(rucaptchaKey);
+        settings.setTimeoutLikes(timeoutLikes);
+        settings.setTimeoutFriend(timeoutFriend);
+        settings.setTimeoutRepost(timeoutRepost);
+        settings.setTimeoutGroup(timeoutGroup);
+        settings.setTimeoutAfterTask(timeoutAfterTask);
+        settings.setProxyType(proxyType);
+
+        return settings;
+    }
+
     public static SettingsResource fromSettings(Settings settings) {
         SettingsResource resource = new SettingsResource();
         resource.setProxies(settings.getProxies());
