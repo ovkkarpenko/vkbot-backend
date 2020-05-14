@@ -68,13 +68,21 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task saveTask(Task task) {
-        User user = userRepository.findByUsername(Helper.getUsername());
-
-        task.setUser(user);
-
         Task savedTask = taskRepository.save(task);
         log.info("IN saveTask - task : {} successfully saved", savedTask);
 
         return savedTask;
+    }
+
+    @Override
+    public Task addTask(Task task) {
+        User user = userRepository.findByUsername(Helper.getUsername());
+
+        task.setUser(user);
+
+        Task addedTask = taskRepository.save(task);
+        log.info("IN addTask - task : {} successfully added", addedTask);
+
+        return addedTask;
     }
 }

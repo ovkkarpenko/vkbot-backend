@@ -5,6 +5,7 @@ import com.sanyakarpenko.vkbot.resources.TaskRequestResource;
 import com.sanyakarpenko.vkbot.resources.TaskResource;
 import com.sanyakarpenko.vkbot.services.TaskService;
 import com.sanyakarpenko.vkbot.types.TaskStatus;
+import com.sanyakarpenko.vkbot.utils.Helper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,19 +23,21 @@ public class TaskRestControllerV1 {
         this.taskService = taskService;
     }
 
-    @GetMapping
+    @GetMapping(consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> getTasks() {
         List<Task> tasks = taskService.findTasksByCurrentUser();
         return ResponseEntity.ok(tasks.stream().map(TaskResource::fromTask));
     }
 
     @PostMapping
-    public ResponseEntity<?> addTask(@RequestBody TaskRequestResource requestResource) {
+    public ResponseEntity<?> createTask(@RequestBody TaskRequestResource requestResource) {
         Task task = requestResource.toTask();
-        task.setStatus(TaskStatus.STOPPED);
 
-        Task addedTask = taskService.saveTask(task);
+        if(requestResource.getRunTaskAfterCreation()) {
+            task.setStatus(TaskStatus.ACTIVE);
+        }
 
+        Task addedTask = taskService.addTask(task);
         return ResponseEntity.ok(TaskResource.fromTask(addedTask));
     }
 
@@ -42,7 +45,7 @@ public class TaskRestControllerV1 {
     public ResponseEntity<?> startTask(@PathVariable Long taskId) {
         Task task = taskService.findTaskById(taskId);
 
-        if (task != null) {
+        if (task != null && task.getUser().getUsername().equals(Helper.getUsername())) {
             task.setStatus(TaskStatus.ACTIVE);
             taskService.saveTask(task);
 
@@ -56,7 +59,7 @@ public class TaskRestControllerV1 {
     public ResponseEntity<?> stopTask(@PathVariable Long taskId) {
         Task task = taskService.findTaskById(taskId);
 
-        if (task != null) {
+        if (task != null && task.getUser().getUsername().equals(Helper.getUsername())) {
             task.setStatus(TaskStatus.STOPPED);
             taskService.saveTask(task);
 
@@ -70,7 +73,7 @@ public class TaskRestControllerV1 {
     public ResponseEntity<?> deleteTask(@PathVariable Long taskId) {
         Task task = taskService.findTaskById(taskId);
 
-        if (task != null) {
+        if (task != null && task.getUser().getUsername().equals(Helper.getUsername())) {
             task.setStatus(TaskStatus.DELETED);
             taskService.saveTask(task);
 

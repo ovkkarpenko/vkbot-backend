@@ -18,18 +18,15 @@ public class SettingsRestControllerV1 {
         this.settingsService = settingsService;
     }
 
-    @GetMapping
+    @GetMapping(consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> getSettings() {
         Settings settings = settingsService.findSettingsByCurrentUser();
         return ResponseEntity.ok(SettingsResource.fromSettings(settings));
     }
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity<?> saveSettings(@RequestBody SettingsResource requestResource) {
-        Settings settings = requestResource.toSettings();
-
-        Settings savedSettings = settingsService.saveSettings(settings);
-
-        return ResponseEntity.ok(SettingsResource.fromSettings(savedSettings));
+        Settings savedSettings = settingsService.saveSettings(requestResource.toSettings());
+        return ResponseEntity.ok().build();
     }
 }

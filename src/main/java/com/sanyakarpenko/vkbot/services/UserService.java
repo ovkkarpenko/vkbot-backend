@@ -12,6 +12,8 @@ public interface UserService {
 
     User findUserByUsername(String username);
 
+    User findCurrentUser();
+
     User findUserById(Long id);
 
     User setStatus(UserStatus userStatus);

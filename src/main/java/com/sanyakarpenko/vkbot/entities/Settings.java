@@ -19,13 +19,13 @@ public class Settings extends BaseEntity {
     private String proxies;
 
     @Column(name = "user_agents")
-    private String userAgents;
+    private String useragents;
 
     @Column(name = "rucaptcha_key")
     private String rucaptchaKey;
 
-    @Column(name = "timeout_likes")
-    private Integer timeoutLikes;
+    @Column(name = "timeout_like")
+    private Integer timeoutLike;
 
     @Column(name = "timeout_friend")
     private Integer timeoutFriend;

@@ -24,7 +24,7 @@ public class Program extends BaseEntity {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private ProgramStatus status;
+    private ProgramStatus status = ProgramStatus.STOPPED;
 
     @ManyToOne
     private User user;

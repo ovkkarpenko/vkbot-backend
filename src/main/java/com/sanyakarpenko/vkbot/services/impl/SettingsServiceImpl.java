@@ -12,11 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class SettingsServiceImpl implements SettingsService {
-    private final UserRepository userRepository;
     private final SettingsRepository settingsRepository;
 
-    public SettingsServiceImpl(UserRepository userRepository, SettingsRepository settingsRepository) {
-        this.userRepository = userRepository;
+    public SettingsServiceImpl(SettingsRepository settingsRepository) {
         this.settingsRepository = settingsRepository;
     }
 
@@ -29,11 +27,19 @@ public class SettingsServiceImpl implements SettingsService {
 
     @Override
     public Settings saveSettings(Settings settings) {
-        User user = userRepository.findByUsername(Helper.getUsername());
+        Settings loadedSettings = settingsRepository.findByUserUsername(Helper.getUsername());
 
-        settings.setUser(user);
+        loadedSettings.setProxies(settings.getProxies());
+        loadedSettings.setUseragents(settings.getUseragents());
+        loadedSettings.setRucaptchaKey(settings.getRucaptchaKey());
+        loadedSettings.setProxyType(settings.getProxyType());
+        loadedSettings.setTimeoutLike(settings.getTimeoutLike());
+        loadedSettings.setTimeoutRepost(settings.getTimeoutRepost());
+        loadedSettings.setTimeoutFriend(settings.getTimeoutFriend());
+        loadedSettings.setTimeoutGroup(settings.getTimeoutGroup());
+        loadedSettings.setTimeoutAfterTask(settings.getTimeoutAfterTask());
 
-        Settings savedSettings = settingsRepository.save(settings);
+        Settings savedSettings = settingsRepository.save(loadedSettings);
         log.info("IN saveSettings - settings : {} successfully saved", savedSettings);
 
         return savedSettings;

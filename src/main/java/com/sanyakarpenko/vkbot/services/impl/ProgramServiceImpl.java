@@ -33,15 +33,23 @@ public class ProgramServiceImpl implements ProgramService {
 
     @Override
     public Program saveProgram(Program program) {
+        Program savedProgram = programRepository.save(program);
+        log.info("IN saveProgram - program : {} successfully saved", savedProgram);
+
+        return savedProgram;
+    }
+
+    @Override
+    public Program addProgram(Program program) {
         User user = userRepository.findByUsername(Helper.getUsername());
 
         program.setUser(user);
         program.setBindingKey(Helper.generateProgramToken());
 
-        Program savedProgram = programRepository.save(program);
-        log.info("IN saveProgram - program : {} successfully saved", savedProgram);
+        Program addedProgram = programRepository.save(program);
+        log.info("IN addProgram - program : {} successfully added", addedProgram);
 
-        return savedProgram;
+        return addedProgram;
     }
 
     @Override
@@ -58,7 +66,6 @@ public class ProgramServiceImpl implements ProgramService {
     @Override
     public List<Program> findProgramsByCurrentUser() {
         List<Program> programs = findProgramsByUsername(Helper.getUsername());
-        log.info("IN findProgramsByCurrentUser - {} programs found", programs.size());
         return programs;
     }
 

@@ -8,6 +8,8 @@ import java.util.List;
 public interface ProgramService {
     Program saveProgram(Program program);
 
+    Program addProgram(Program program);
+
     List<Program> findProgramsByUsername(String username);
 
     List<Program> findProgramsByCurrentUser();

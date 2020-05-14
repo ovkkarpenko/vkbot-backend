@@ -9,6 +9,6 @@ public class Helper {
     }
 
     public static String generateProgramToken() {
-        return RandomStringUtils.random(100, true, true);
+        return RandomStringUtils.random(60, true, true);
     }
 }

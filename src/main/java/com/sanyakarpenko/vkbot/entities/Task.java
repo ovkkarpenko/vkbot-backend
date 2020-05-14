@@ -21,21 +21,24 @@ public class Task extends BaseEntity {
     @Column(name = "url", nullable = false)
     private String url;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "count")
     private Integer count;
 
     @Column(name = "stats_completed")
-    private Integer statsCompleted;
+    private Integer statsCompleted = 0;
 
     @Column(name = "stats_initial")
-    private Integer statsInitial;
+    private Integer statsInitial = 0;
 
     @Column(name = "stats_current")
-    private Integer statsCurrent;
+    private Integer statsCurrent = 0;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private TaskStatus status;
+    private TaskStatus status = TaskStatus.STOPPED;
 
     @Column(name = "object_type")
     @Enumerated(EnumType.STRING)

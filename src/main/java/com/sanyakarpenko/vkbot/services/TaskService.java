@@ -12,4 +12,6 @@ public interface TaskService {
     List<Task> findTasksByUsername(String username);
 
     Task saveTask(Task task);
+
+    Task addTask(Task task);
 }

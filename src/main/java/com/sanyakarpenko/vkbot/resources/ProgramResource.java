@@ -9,6 +9,8 @@ public class ProgramResource {
     private Long id;
     private String name;
     private String bindingKey;
+    private Integer accountCount;
+    private Integer validAccounts;
     private ProgramStatus status;
 
     public Program toProgram() {
