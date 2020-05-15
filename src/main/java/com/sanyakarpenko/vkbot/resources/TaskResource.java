@@ -15,6 +15,7 @@ public class TaskResource {
     private Integer statsCompleted;
     private TaskStatus status;
     private TaskType taskType;
+    private ObjectType objectType;
 
     public Task toTask() {
         Task task = new Task();
@@ -25,6 +26,7 @@ public class TaskResource {
         task.setStatsCompleted(statsCompleted);
         task.setStatus(status);
         task.setTaskType(taskType);
+        task.setObjectType(objectType);
 
         return task;
     }
@@ -38,6 +40,7 @@ public class TaskResource {
         resource.setStatsCompleted(task.getStatsCompleted());
         resource.setStatus(task.getStatus());
         resource.setTaskType(task.getTaskType());
+        resource.setObjectType(task.getObjectType());
 
         return resource;
     }

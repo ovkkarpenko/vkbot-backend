@@ -8,8 +8,10 @@ import com.sanyakarpenko.vkbot.services.SettingsService;
 import com.sanyakarpenko.vkbot.utils.Helper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @Slf4j
 public class SettingsServiceImpl implements SettingsService {
     private final SettingsRepository settingsRepository;
@@ -19,9 +21,15 @@ public class SettingsServiceImpl implements SettingsService {
     }
 
     @Override
+    public Settings findSettingsByUsername(String username) {
+        Settings settings = settingsRepository.findByUserUsername(username);
+        log.info("IN findSettingsByUsername - {} settings found", settings);
+        return settings;
+    }
+
+    @Override
     public Settings findSettingsByCurrentUser() {
-        Settings settings = settingsRepository.findByUserUsername(Helper.getUsername());
-        log.info("IN findSettingsByCurrentUser - {} settings found", settings);
+        Settings settings = findSettingsByUsername(Helper.getUsername());
         return settings;
     }
 

@@ -59,12 +59,6 @@ public class ProgramRestControllerV1 {
                 }));
     }
 
-    @GetMapping(value = "/account/{bindingKey}", consumes = MediaType.ALL_VALUE)
-    public ResponseEntity<?> getAccounts(@PathVariable String bindingKey) {
-        List<Account> accounts = programService.findProgramAccountsByBindingKey(bindingKey);
-        return ResponseEntity.ok(accounts.stream().map(AccountResource::fromAccount));
-    }
-
     @PostMapping
     public ResponseEntity<?> addProgram(@RequestBody ProgramRequestResource requestResource) {
         Program addedProgram = programService.addProgram(requestResource.toProgram());

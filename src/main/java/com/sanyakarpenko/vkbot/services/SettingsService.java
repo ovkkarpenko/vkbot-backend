@@ -7,5 +7,7 @@ import com.sanyakarpenko.vkbot.types.TaskStatus;
 public interface SettingsService {
     Settings findSettingsByCurrentUser();
 
+    Settings findSettingsByUsername(String username);
+
     Settings saveSettings(Settings settings);
 }

@@ -9,12 +9,14 @@ import com.sanyakarpenko.vkbot.repositories.UserRepository;
 import com.sanyakarpenko.vkbot.services.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @Slf4j
 public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;

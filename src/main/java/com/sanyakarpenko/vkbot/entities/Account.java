@@ -41,11 +41,11 @@ public class Account extends BaseEntity {
 
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private Gender gender = Gender.NONE;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private AccountStatus status;
+    private AccountStatus status = AccountStatus.NONE;
 
     @ManyToOne
     private Program program;

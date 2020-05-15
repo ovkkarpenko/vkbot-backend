@@ -164,7 +164,7 @@ public class ClientProgramRestControllerV1 {
                     .body(new ErrorResponseResource(3L, "No program found by bindingKey: " + bindingKey));
         }
 
-        Settings settings = settingsService.findSettingsByCurrentUser();
+        Settings settings = settingsService.findSettingsByUsername(program.getUser().getUsername());
         return ResponseEntity.ok(SettingsResource.fromSettings(settings));
     }
 }

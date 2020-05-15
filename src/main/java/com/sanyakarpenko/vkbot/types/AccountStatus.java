@@ -1,5 +1,5 @@
 package com.sanyakarpenko.vkbot.types;
 
 public enum AccountStatus {
-    VALID, INVALID, ERROR, DELETED, NONE
+    VALID, INVALID, NEED_VALIDATION, ERROR, DELETED, NONE
 }

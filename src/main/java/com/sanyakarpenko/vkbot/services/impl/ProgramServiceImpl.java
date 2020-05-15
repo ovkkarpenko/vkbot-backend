@@ -12,6 +12,7 @@ import com.sanyakarpenko.vkbot.repositories.AccountRepository;
 import com.sanyakarpenko.vkbot.services.ProgramService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @Slf4j
 public class ProgramServiceImpl implements ProgramService {
     private final UserRepository userRepository;
@@ -104,13 +106,13 @@ public class ProgramServiceImpl implements ProgramService {
     public List<Account> findProgramAccountsByBindingKey(String bindingKey) {
         Program program = programRepository.findByBindingKey(bindingKey);
 
-        if(program == null || !program.getUser().getUsername().equals(Helper.getUsername())) {
+        if(program == null) {
             return new ArrayList<>();
         }
 
         List<Account> accounts = accountRepository.findAllByProgramBindingKey(bindingKey)
                 .stream()
-                .filter(account -> account.getStatus() != AccountStatus.DELETED)
+                .filter(account -> account.getStatus() == AccountStatus.NONE || account.getStatus() == AccountStatus.VALID)
                 .collect(Collectors.toList());
 
         log.info("IN findProgramAccountsByBindingKey - {} accounts found", accounts.size());
