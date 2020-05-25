@@ -11,5 +11,5 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedOrigins("https://vkbot-noves.herokuapp.com");
-    }
+    }//
 }
