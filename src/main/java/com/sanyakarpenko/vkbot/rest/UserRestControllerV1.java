@@ -21,7 +21,7 @@ public class UserRestControllerV1 {
         this.userService = userService;
     }
 
-    @GetMapping(consumes = MediaType.ALL_VALUE)
+    @RequestMapping(consumes = MediaType.ALL_VALUE, method = {RequestMethod.POST, RequestMethod.OPTIONS})
     public ResponseEntity<?> getUser() {
         User user = userService.findCurrentUser();
         return ResponseEntity.ok(UserResource.fromUser(user));
