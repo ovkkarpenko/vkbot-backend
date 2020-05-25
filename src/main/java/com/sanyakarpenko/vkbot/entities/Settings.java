@@ -12,13 +12,13 @@ import javax.persistence.*;
 @Entity
 @Table(name = "settings")
 @Data
-@ToString(exclude = "user")
+@ToString(exclude = {"user", "proxies", "useragents"})
 @NoArgsConstructor
 public class Settings extends BaseEntity {
-    @Column(name = "proxies")
+    @Column(name = "proxies", columnDefinition = "MEDIUMTEXT")
     private String proxies;
 
-    @Column(name = "user_agents")
+    @Column(name = "user_agents", columnDefinition = "MEDIUMTEXT")
     private String useragents;
 
     @Column(name = "rucaptcha_key")

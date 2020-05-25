@@ -2,11 +2,10 @@ package com.sanyakarpenko.vkbot.rest;
 
 import com.sanyakarpenko.vkbot.entities.*;
 import com.sanyakarpenko.vkbot.resources.*;
-import com.sanyakarpenko.vkbot.services.AccountService;
-import com.sanyakarpenko.vkbot.services.ProgramService;
-import com.sanyakarpenko.vkbot.services.SettingsService;
-import com.sanyakarpenko.vkbot.services.TaskService;
+import com.sanyakarpenko.vkbot.services.*;
+import com.sanyakarpenko.vkbot.types.TaskStatus;
 import com.sanyakarpenko.vkbot.types.TaskType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,20 +17,21 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/v1/client_program",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class ClientProgramRestControllerV1 {
     private final TaskService taskService;
     private final AccountService accountService;
     private final ProgramService programService;
-    private final SettingsService settingsService;
+    private final LogsService logsService;
 
     public ClientProgramRestControllerV1(TaskService taskService,
                                          AccountService accountService,
                                          ProgramService programService,
-                                         SettingsService settingsService) {
+                                         LogsService logsService) {
         this.taskService = taskService;
         this.accountService = accountService;
         this.programService = programService;
-        this.settingsService = settingsService;
+        this.logsService = logsService;
     }
 
     @GetMapping(value = "/{bindingKey}",
@@ -108,14 +108,41 @@ public class ClientProgramRestControllerV1 {
                     .body(new ErrorResponseResource(2L, "Invalid accountId"));
         }
 
-        List<Task> tasks = taskService.findTasksByUsername(program.getUser().getUsername());
+        List<Task> tasks = program.getUser().getTasks();
 
         List<Task> filteredTasks = tasks
                 .stream()
-                .filter(task -> !task.getAccountsHistory().contains(account) && task.getTaskType() == requestResource.getTaskType())
+                .filter(task -> task.getStatus().equals(TaskStatus.ACTIVE) &&
+                        !task.getAccountsHistory().contains(account) &&
+                        task.getTaskType() == requestResource.getTaskType())
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(filteredTasks.stream().map(TaskResource::fromTask));
+    }
+
+    @PostMapping("/logs/{bindingKey}")
+    public ResponseEntity<?> addLogs(@PathVariable String bindingKey, @RequestBody LogsResource requestResource) {
+        Program program = programService.findProgramByBindingKey(bindingKey);
+        if (program == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(2L, "Invalid bindingKey"));
+        }
+
+        Account account = accountService.findAccountById(requestResource.getAccountId());
+        if (account == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponseResource(2L, "Invalid accountId"));
+        }
+
+        Logs logs = new Logs();
+        logs.setProgram(program);
+        logs.setAccount(account);
+        logs.setMessage(requestResource.getMessage());
+
+        logsService.addLog(logs);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -164,7 +191,7 @@ public class ClientProgramRestControllerV1 {
                     .body(new ErrorResponseResource(3L, "No program found by bindingKey: " + bindingKey));
         }
 
-        Settings settings = settingsService.findSettingsByUsername(program.getUser().getUsername());
+        Settings settings = program.getUser().getSettings();
         return ResponseEntity.ok(SettingsResource.fromSettings(settings));
     }
 }

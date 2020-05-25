@@ -2,6 +2,7 @@ package com.sanyakarpenko.vkbot.entities;
 
 import com.sanyakarpenko.vkbot.types.AccountStatus;
 import com.sanyakarpenko.vkbot.types.Gender;
+import com.sanyakarpenko.vkbot.types.ProxyType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "accounts")
 @Data
-@ToString(exclude = {"token", "program", "tasks"})
+@ToString(exclude = {"program", "tasks", "logs"})
 @NoArgsConstructor
 public class Account extends BaseEntity {
     @Column(name = "user_id")
@@ -52,4 +53,7 @@ public class Account extends BaseEntity {
 
     @ManyToMany(mappedBy = "accountsHistory", fetch = FetchType.LAZY)
     private List<Task> tasks;
+
+    @OneToMany(mappedBy = "account")
+    private List<Logs> logs;
 }

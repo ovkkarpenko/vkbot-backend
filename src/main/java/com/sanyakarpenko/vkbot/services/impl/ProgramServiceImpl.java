@@ -75,7 +75,7 @@ public class ProgramServiceImpl implements ProgramService {
     public Program findProgramByBindingKey(String bindingKey) {
         Program program = programRepository.findByBindingKey(bindingKey);
 
-        if(program.getStatus() == ProgramStatus.DELETED) {
+        if(program == null || program.getStatus() == ProgramStatus.DELETED) {
             return null;
         }
 

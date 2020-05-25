@@ -1,6 +1,7 @@
 package com.sanyakarpenko.vkbot.rest;
 
 import com.sanyakarpenko.vkbot.entities.Account;
+import com.sanyakarpenko.vkbot.entities.BaseEntity;
 import com.sanyakarpenko.vkbot.entities.Program;
 import com.sanyakarpenko.vkbot.resources.AccountResource;
 import com.sanyakarpenko.vkbot.resources.ProgramRequestResource;
@@ -57,6 +58,17 @@ public class ProgramRestControllerV1 {
 
                     return resource;
                 }));
+    }
+
+    @GetMapping(value = "/{programId}/accounts", consumes = MediaType.ALL_VALUE)
+    public ResponseEntity<?> getProgramAccounts(@PathVariable Long programId) {
+        Program program = programService.findProgramById(programId);
+        if(!program.getUser().getUsername().equals(Helper.getUsername())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<Long> accounts = program.getAccounts().stream().map(BaseEntity::getId).collect(Collectors.toList());
+        return ResponseEntity.ok(accounts);
     }
 
     @PostMapping

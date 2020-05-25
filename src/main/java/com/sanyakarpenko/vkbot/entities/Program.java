@@ -31,4 +31,7 @@ public class Program extends BaseEntity {
 
     @OneToMany(mappedBy = "program")
     private List<Account> accounts;
+
+    @OneToMany(mappedBy = "program")
+    private List<Logs> logs;
 }
