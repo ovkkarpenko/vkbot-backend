@@ -7,5 +7,11 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://ba1998bed1b8a3:37ca4018@us-cdbr-east-06.cleardb.net/heroku_8a1c8f37014fe1d?reconnect=true</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="a22895p8_vkbot@a22895p8.beget.tech" uuid="4003d8b6-c18d-442e-86c5-651e40af06f6">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://a22895p8.beget.tech:3306/a22895p8_vkbot</jdbc-url>
+    </data-source>
   </component>
 </project>
