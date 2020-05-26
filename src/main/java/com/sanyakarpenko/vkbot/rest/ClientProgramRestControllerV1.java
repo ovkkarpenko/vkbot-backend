@@ -90,10 +90,10 @@ public class ClientProgramRestControllerV1 {
     /**
      * Find tasks that have not been used before for the selected account
      *
-     * @param requestResource
+     * @param bindingKey, accountId
      */
-    @PostMapping("/task/{bindingKey}")
-    public ResponseEntity<?> findTasks(@PathVariable String bindingKey, @RequestBody FindProgramTasksRequestResource requestResource) {
+    @PostMapping("/task/{accountId}/{bindingKey}")
+    public ResponseEntity<?> findTasks(@PathVariable String bindingKey, @PathVariable Long accountId) {
         Program program = programService.findProgramByBindingKey(bindingKey);
         if (program == null) {
             return ResponseEntity
@@ -101,7 +101,7 @@ public class ClientProgramRestControllerV1 {
                     .body(new ErrorResponseResource(2L, "Invalid bindingKey"));
         }
 
-        Account account = accountService.findAccountById(requestResource.getAccountId());
+        Account account = accountService.findAccountById(accountId);
         if (account == null) {
             return ResponseEntity
                     .badRequest()
@@ -113,8 +113,7 @@ public class ClientProgramRestControllerV1 {
         List<Task> filteredTasks = tasks
                 .stream()
                 .filter(task -> task.getStatus().equals(TaskStatus.ACTIVE) &&
-                        !task.getAccountsHistory().contains(account) &&
-                        task.getTaskType() == requestResource.getTaskType())
+                        !task.getAccountsHistory().contains(account))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(filteredTasks.stream().map(TaskResource::fromTask));
