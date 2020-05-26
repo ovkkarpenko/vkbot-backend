@@ -92,7 +92,8 @@ public class ClientProgramRestControllerV1 {
      *
      * @param bindingKey, accountId//
      */
-    @GetMapping("/task/{accountId}/{bindingKey}")
+    @GetMapping(value = "/task/{accountId}/{bindingKey}",
+            consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> findTasks(@PathVariable String bindingKey, @PathVariable Long accountId) {
         Program program = programService.findProgramByBindingKey(bindingKey);
         if (program == null) {
