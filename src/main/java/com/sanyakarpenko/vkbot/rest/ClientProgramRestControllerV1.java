@@ -92,7 +92,7 @@ public class ClientProgramRestControllerV1 {
      *
      * @param bindingKey, accountId
      */
-    @PostMapping("/task/{accountId}/{bindingKey}")
+    @GetMapping("/task/{accountId}/{bindingKey}")
     public ResponseEntity<?> findTasks(@PathVariable String bindingKey, @PathVariable Long accountId) {
         Program program = programService.findProgramByBindingKey(bindingKey);
         if (program == null) {
