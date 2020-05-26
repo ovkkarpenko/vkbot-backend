@@ -90,7 +90,7 @@ public class ClientProgramRestControllerV1 {
     /**
      * Find tasks that have not been used before for the selected account
      *
-     * @param bindingKey, accountId
+     * @param bindingKey, accountId//
      */
     @GetMapping("/task/{accountId}/{bindingKey}")
     public ResponseEntity<?> findTasks(@PathVariable String bindingKey, @PathVariable Long accountId) {
